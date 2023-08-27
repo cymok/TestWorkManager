@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnGet.setOnClickListener {
             val text = SPUtils.getInstance().getString("doWork")
-            binding.tv.text = "获取上一次 doWork 的执行时间:\n${text}"
+            binding.tv.text = "获取保存的 doWork 的执行时间:\n${text}"
         }
 
         binding.btnClear.setOnClickListener {
@@ -103,6 +103,10 @@ class MainActivity : AppCompatActivity() {
             WorkManager.getInstance(this).cancelAllWorkByTag("Tag-PeriodicWork")
             WorkManager.getInstance(this).cancelUniqueWork("Name-Singleton-PeriodicWork")
 
+        }
+
+        binding.btn4.setOnClickListener {
+            WorkManager.getInstance(this).cancelAllWork()
         }
 
     }
