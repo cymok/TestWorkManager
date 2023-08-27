@@ -71,7 +71,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="可以执行周期性 Worker 然后测试效果\n每执行一次 Worker 会保存一次内容, \n点击 get 按钮会显示出来" />
+                android:text="可以执行周期性 Work 然后测试效果\n每执行一次 Worker 会保存一次内容, \n点击 get 按钮会显示出来\n(若要测试后台执行, 国产定制 ROM 可能需要开启 自启动)" />
 
             <Button
                 android:id="@+id/btn2"
