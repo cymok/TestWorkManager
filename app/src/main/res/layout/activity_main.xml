@@ -127,6 +127,12 @@
                     android:layout_height="wrap_content"
                     android:text="取消所有 Work" />
 
+                <Button
+                    android:id="@+id/btn44"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="任务调度 网络" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>

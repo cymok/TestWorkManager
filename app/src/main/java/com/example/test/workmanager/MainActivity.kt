@@ -5,8 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        val context = this
 
         // WorkerManager 官方文档
         // https://developer.android.google.cn/topic/libraries/architecture/workmanager?hl=zh-cn
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 .addTag("Tag-OneTimeWork")
                 .build()
 
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 .enqueue(request)
         }
 
@@ -62,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 .addTag("Tag-PeriodicWork")
                 .build()
 
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 .enqueue(request)
         }
 
@@ -77,10 +80,8 @@ class MainActivity : AppCompatActivity() {
             val request = OneTimeWorkRequestBuilder<TestWorker>()
                 .addTag("Tag-Singleton-OneTimeWork")
                 .build()
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 .enqueueUniqueWork("Name-Singleton-OneTimeWork", ExistingWorkPolicy.KEEP, request)
-            val id = request.id
-            WorkManager.getInstance(this).cancelWorkById(id)
         }
 
         binding.btn22.setOnClickListener {
@@ -93,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 .addTag("Tag-Singleton-PeriodicWork")
                 .build()
 
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
                     "Name-Singleton-PeriodicWork", // 用于唯一标识工作请求
                     ExistingPeriodicWorkPolicy.KEEP, // 如果已有使用该名称且尚未完成的唯一工作链，应执行什么操作
@@ -112,23 +113,23 @@ class MainActivity : AppCompatActivity() {
             val request = OneTimeWorkRequestBuilder<TestWorker>()
                 .addTag("Tag")
                 .build()
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 .enqueueUniqueWork("Name", ExistingWorkPolicy.APPEND, request)
             val id = request.id
-            WorkManager.getInstance(this).cancelWorkById(id)
+            WorkManager.getInstance(context).cancelWorkById(id)
 
             // by tag
-            WorkManager.getInstance(this).cancelAllWorkByTag("Tag-OneTimeWork")
-            WorkManager.getInstance(this).cancelAllWorkByTag("Tag-PeriodicWork")
+            WorkManager.getInstance(context).cancelAllWorkByTag("Tag-OneTimeWork")
+            WorkManager.getInstance(context).cancelAllWorkByTag("Tag-PeriodicWork")
 
             // by name
-            WorkManager.getInstance(this).cancelAllWorkByTag("Name-Singleton-OneTimeWork")
-            WorkManager.getInstance(this).cancelUniqueWork("Name-Singleton-PeriodicWork")
+            WorkManager.getInstance(context).cancelUniqueWork("Name-Singleton-OneTimeWork")
+            WorkManager.getInstance(context).cancelUniqueWork("Name-Singleton-PeriodicWork")
         }
 
         binding.btn33.setOnClickListener {
             // 取消所有 Worker
-            WorkManager.getInstance(this).cancelAllWork()
+            WorkManager.getInstance(context).cancelAllWork()
         }
 
         binding.btn4.setOnClickListener {
@@ -146,13 +147,27 @@ class MainActivity : AppCompatActivity() {
                 .addTag("Tag-requestUpload")
                 .build()
 
-            WorkManager.getInstance(this)
+            WorkManager.getInstance(context)
                 // request 也可以替代为传入 requestList, `beginUniqueWork` 提供了 request 和 requestList 的重载函数
                 .beginUniqueWork("Name", ExistingWorkPolicy.APPEND, request)
                 .then(requestCache)
                 .then(requestUpload)
                 .enqueue()
 
+        }
+
+        binding.btn44.setOnClickListener {
+            // 设置网络约束
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // 任何网络、不计费网络、无网络 等
+                .build()
+
+            val workRequest = OneTimeWorkRequestBuilder<TestWorker>()
+                .setConstraints(constraints) // 设置约束
+                .build()
+
+            WorkManager.getInstance(context)
+                .enqueue(workRequest)
         }
 
     }
