@@ -3,7 +3,7 @@
 
 WorkerManager 官方文档 <https://developer.android.google.cn/topic/libraries/architecture/workmanager?hl=zh-cn>
 
-demo <https://github.com/cymok/TestWorkManager>
+Demo App <https://github.com/cymok/TestWorkManager>
 
 > 限制：
 
@@ -193,3 +193,9 @@ val workRequest = OneTimeWorkRequestBuilder<TestWorker>()
 WorkManager.getInstance(context)
     .enqueue(workRequest)
 ```
+
+#### 测试
+
+- 在 [Demo App](https://github.com/cymok/TestWorkManager) 里可进行一些测试
+
+- 命令 `adb shell dumpsys jobscheduler` 可查看任务记录, 负责管理 Worker 执行的组件为 `SystemJobService`
