@@ -5,6 +5,20 @@ WorkerManager 官方文档 <https://developer.android.google.cn/topic/libraries/
 
 Demo App <https://github.com/cymok/TestWorkManager>
 
+---
+
+> 优势：
+
+- 任务持久化，重启后有效
+
+- 支持任务链调用，任务依赖
+
+- 约束条件，可以在 网络、充电等 多种状态条件下执行
+
+- 高度封装，相比 比较底层的 JobService ，不需要过多手动配置
+
+- 任务可控，返回值 WorkRequest，可以控制任务的生命周期、状态等
+
 > 限制：
 
 - 国产定制 ROM 可能需要开启 自启动 才能后台执行 (实测 MIUI 12 是需要开启 自启动，否则会在 APP 启动才能执行后台期间所有任务)
